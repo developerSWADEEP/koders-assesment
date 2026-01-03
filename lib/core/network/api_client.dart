@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Response;
 import '../constants/api_constants.dart';
 import '../constants/app_constants.dart';
@@ -34,14 +35,16 @@ class ApiClient extends GetxService {
       ),
     );
 
-    // Add logging interceptor for debug mode
-    _dio.interceptors.add(
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        logPrint: (obj) => print('API: $obj'),
-      ),
-    );
+    // Add logging interceptor only in debug mode
+    if (kDebugMode) {
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          logPrint: (obj) => print('API: $obj'),
+        ),
+      );
+    }
   }
 
   void _onRequest(RequestOptions options, RequestInterceptorHandler handler) {
